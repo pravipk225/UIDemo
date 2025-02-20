@@ -4,7 +4,7 @@ import ComponentSection from "./ComponentSection";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Card } from "./ui/card";
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { AlertsDemo } from "./AlertsDemo";
 import { Calendar } from "./ui/calendar";
 import { Progress } from "./ui/progress";
 import { Skeleton } from "./ui/skeleton";
@@ -72,6 +72,12 @@ import {
 import { ScrollArea } from "./ui/scroll-area";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
+import { DateRangePickerDemo } from "./DateRangePickerDemo";
+import { ColorPickerDemo } from "./ColorPickerDemo";
+import { addDays } from "date-fns";
+import { RatingDemo } from "./RatingDemo";
+import { ChipsDemo } from "./ChipsDemo";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import {
   Table,
   TableBody,
@@ -80,11 +86,23 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
-import { Toaster } from "./ui/toaster";
-import { useToast } from "./ui/use-toast";
-import { Combobox } from "@/components/ui/combobox";
+import { ToastDemo } from "./ToastDemo";
 import { Separator } from "./ui/separator";
-import { AspectRatio } from "./ui/aspect-ratio";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./ui/accordion";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "./ui/pagination";
 import { Checkbox } from "./ui/checkbox";
 import {
   AlertCircle,
@@ -255,13 +273,7 @@ const Home = () => {
               description="Alert and notification components"
               code={`<Alert><AlertTitle>Note</AlertTitle><AlertDescription>This is an alert.</AlertDescription></Alert>`}
             >
-              <Alert>
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Note</AlertTitle>
-                <AlertDescription>
-                  This is an important alert message.
-                </AlertDescription>
-              </Alert>
+              <AlertsDemo />
             </ComponentSection>
           </section>
 
@@ -718,64 +730,123 @@ const Home = () => {
             <ComponentSection
               title="Toast Notifications"
               description="Pop-up notifications system"
-              code={`useToast().toast({ title: "Success", description: "Action completed" })`}
+              code={`const { toast } = useToast(); toast({ title: "Success", description: "Action completed" })`}
             >
-              <div className="space-y-2">
-                <Button
-                  onClick={() => {
-                    useToast().toast({
-                      title: "Success!",
-                      description: "Your action has been completed.",
-                    });
-                  }}
-                >
-                  Show Toast
-                </Button>
-              </div>
-              <Toaster />
+              <ToastDemo />
             </ComponentSection>
           </section>
 
-          <section id="combobox">
+          <section id="accordion">
             <ComponentSection
-              title="Combobox"
-              description="Searchable dropdown with autocomplete"
-              code={`<Combobox items={[...]} />`}
+              title="Accordion"
+              description="Expandable content sections"
+              code={`<Accordion type="single" collapsible><AccordionItem><AccordionTrigger>Section 1</AccordionTrigger><AccordionContent>Content 1</AccordionContent></AccordionItem></Accordion>`}
             >
-              <div className="w-[200px]">
-                <Combobox
-                  items={[
-                    { label: "Option 1", value: "1" },
-                    { label: "Option 2", value: "2" },
-                    { label: "Option 3", value: "3" },
-                  ]}
-                  placeholder="Select an option..."
-                />
-              </div>
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="item-1">
+                  <AccordionTrigger>Is it accessible?</AccordionTrigger>
+                  <AccordionContent>
+                    Yes. It adheres to the WAI-ARIA design pattern.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="item-2">
+                  <AccordionTrigger>Is it styled?</AccordionTrigger>
+                  <AccordionContent>
+                    Yes. It comes with default styles that matches your theme.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="item-3">
+                  <AccordionTrigger>Is it animated?</AccordionTrigger>
+                  <AccordionContent>
+                    Yes. It's animated by default, but you can disable it if you
+                    prefer.
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </ComponentSection>
           </section>
 
-          <section id="aspect-ratio">
+          <section id="pagination">
             <ComponentSection
-              title="Aspect Ratio Box"
-              description="Maintain aspect ratio for responsive content"
-              code={`<AspectRatio ratio={16/9}><img /></AspectRatio>`}
+              title="Pagination"
+              description="Navigation for multi-page content"
+              code={`<Pagination><PaginationContent>...</PaginationContent></Pagination>`}
             >
-              <div className="w-[400px] mx-auto">
-                <AspectRatio
-                  ratio={16 / 9}
-                  className="bg-muted rounded-lg overflow-hidden"
-                >
-                  <img
-                    src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80"
-                    alt="Photo"
-                    className="object-cover w-full h-full"
-                  />
-                </AspectRatio>
-                <p className="text-sm text-muted-foreground text-center mt-2">
-                  16:9 Aspect Ratio
-                </p>
-              </div>
+              <Pagination>
+                <PaginationContent>
+                  <PaginationPrevious href="#" />
+                  <PaginationLink href="#" isActive>
+                    1
+                  </PaginationLink>
+                  <PaginationLink href="#">2</PaginationLink>
+                  <PaginationLink href="#">3</PaginationLink>
+                  <PaginationEllipsis />
+                  <PaginationNext href="#" />
+                </PaginationContent>
+              </Pagination>
+            </ComponentSection>
+          </section>
+
+          <section id="rating">
+            <ComponentSection
+              title="Rating"
+              description="Star rating component"
+              code={`<Rating value={3} onChange={(value) => console.log(value)} />`}
+            >
+              <RatingDemo />
+            </ComponentSection>
+          </section>
+
+          <section id="chips">
+            <ComponentSection
+              title="Chips/Tags"
+              description="Compact elements for categories, filters, or selections"
+              code={`<Chip>Default</Chip>`}
+            >
+              <ChipsDemo />{" "}
+            </ComponentSection>
+          </section>
+
+          <section id="radio-group">
+            <ComponentSection
+              title="Radio Group"
+              description="Select a single option from a group"
+              code={`<RadioGroup defaultValue="option-1"><RadioGroupItem value="option-1" /></RadioGroup>`}
+            >
+              <RadioGroup defaultValue="option-1">
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="option-1" id="option-1" />
+                  <Label htmlFor="option-1">Option 1</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="option-2" id="option-2" />
+                  <Label htmlFor="option-2">Option 2</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="option-3" id="option-3" />
+                  <Label htmlFor="option-3">Option 3</Label>
+                </div>
+              </RadioGroup>
+            </ComponentSection>
+          </section>
+
+          <section id="date-range">
+            <ComponentSection
+              title="Date Range Picker"
+              description="Select a range of dates"
+              code={`<DateRangePicker date={date} onDateChange={setDate} />`}
+            >
+              <DateRangePickerDemo />
+            </ComponentSection>
+          </section>
+
+          <section id="color-picker">
+            <ComponentSection
+              title="Color Picker"
+              description="Select colors with a color picker or predefined swatches"
+              code={`<ColorPicker value={color} onChange={setColor} />`}
+            >
+              <ColorPickerDemo />
             </ComponentSection>
           </section>
         </div>

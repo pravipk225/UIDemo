@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,32 +15,29 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
+interface Option {
+  value: string;
+  label: string;
+}
 
-export function Combobox({ placeholder = "Select framework..." }) {
+interface MultiSelectProps {
+  options: Option[];
+  selected: string[];
+  onChange: (selected: string[]) => void;
+  placeholder?: string;
+}
+
+export function MultiSelect({
+  options,
+  selected,
+  onChange,
+  placeholder = "Select options...",
+}: MultiSelectProps) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+
+  const selectedItems = options.filter((option) =>
+    selected.includes(option.value),
+  );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -51,8 +48,8 @@ export function Combobox({ placeholder = "Select framework..." }) {
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
+          {selectedItems.length > 0
+            ? selectedItems.map((item) => item.label).join(", ")
             : placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -60,24 +57,27 @@ export function Combobox({ placeholder = "Select framework..." }) {
       <PopoverContent className="w-full p-0">
         <Command>
           <CommandInput placeholder={placeholder} />
-          <CommandEmpty>No framework found.</CommandEmpty>
+          <CommandEmpty>No options found.</CommandEmpty>
           <CommandGroup>
-            {frameworks.map((framework) => (
+            {options.map((option) => (
               <CommandItem
-                key={framework.value}
-                value={framework.value}
-                onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue);
-                  setOpen(false);
+                key={option.value}
+                onSelect={() => {
+                  const newSelected = selected.includes(option.value)
+                    ? selected.filter((value) => value !== option.value)
+                    : [...selected, option.value];
+                  onChange(newSelected);
                 }}
               >
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === framework.value ? "opacity-100" : "opacity-0",
+                    selected.includes(option.value)
+                      ? "opacity-100"
+                      : "opacity-0",
                   )}
                 />
-                {framework.label}
+                {option.label}
               </CommandItem>
             ))}
           </CommandGroup>

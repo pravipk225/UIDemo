@@ -31,8 +31,13 @@ const defaultSections = [
   { id: "table", title: "Data Table" },
   { id: "upload", title: "File Upload" },
   { id: "toast", title: "Toast" },
-  { id: "combobox", title: "Combobox" },
-  { id: "aspect-ratio", title: "Aspect Ratio" },
+  { id: "accordion", title: "Accordion" },
+  { id: "pagination", title: "Pagination" },
+  { id: "rating", title: "Rating" },
+  { id: "chips", title: "Chips/Tags" },
+  { id: "radio-group", title: "Radio Group" },
+  { id: "date-range", title: "Date Range Picker" },
+  { id: "color-picker", title: "Color Picker" },
 ];
 
 const Sidebar = ({ sections = defaultSections, className }: SidebarProps) => {
